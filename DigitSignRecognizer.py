@@ -43,6 +43,8 @@ class DigitSignRecognizer():
             return 8
         elif all(fingers_up_down[2:]) == 1 and fingers_up_down.count(1) == 3:
             return 9
+        elif all(fingers_up_down[:2]) == 1 and fingers_up_down.count(1) == 2:
+            return 'select'
         else:
             return -1
     
@@ -62,6 +64,8 @@ class DigitSignRecognizer():
         
         return False
 
+    def get_finger_postion(self):
+        return self.__from_perc(self.tips_lms[1][1].x), self.__from_perc(self.tips_lms[1][1].y, dim='h')
 
     def main(self, img):
         self.__img = img
@@ -75,10 +79,10 @@ class DigitSignRecognizer():
             # pick only one hand (left most in the picture if there are more than one)
             hand_lms = result.multi_hand_landmarks[0]
             
-            tips_lms = [(id, lm) for id, lm in enumerate(hand_lms.landmark) if id in self.__tipsInds]
+            self.tips_lms = [(id, lm) for id, lm in enumerate(hand_lms.landmark) if id in self.__tipsInds]
             
             
-            for tip_lm in tips_lms:
+            for tip_lm in self.tips_lms:
                 x_tip, y_tip = self.__from_perc(tip_lm[1].x, 'w'), self.__from_perc(tip_lm[1].y, 'h')
                 center_tip = (x_tip, y_tip)
                 # tip
@@ -105,7 +109,7 @@ class DigitSignRecognizer():
                     fingers_up_down.append(0)
                 
             # Detect ZERO
-            is_zero = self.__is_zero(tips_lms)
+            is_zero = self.__is_zero(self.tips_lms)
             
             
             # count number
