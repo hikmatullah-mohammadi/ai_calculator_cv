@@ -18,13 +18,19 @@ operand2 = '0'
 answer = ''
 cursor = 0 # where to enter input
 
+# read the images of operators
+plus = cv2.imread('./images/operators/plus.jpg')
+minus = cv2.imread('./images/operators/minus.jpg')
+mult = cv2.imread('./images/operators/mult.jpg')
+div = cv2.imread('./images/operators/div.jpg')
+equal = cv2.imread('./images/operators/equal.jpg')
 
 while True:
     success, img = cap.read()
     img = cv2.flip(img, 1)    
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # do the drawings
-    img = utils.draw_collages(img)
+    img = utils.draw_collages(img, plus=plus, minus=minus, mult=mult, div=div, equal=equal)
     # detect number
     number = digitSignRecognizer.main(img)
     if number and number != -1:

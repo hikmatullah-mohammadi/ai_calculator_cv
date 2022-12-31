@@ -12,7 +12,6 @@ class DigitSignRecognizer():
         
         self.__mpHands = mp.solutions.hands
         self.__hands = self.__mpHands.Hands()
-        # self.__draw_utils = mp.solutions.drawing_utils
         
         self.__tipsInds = [4, 8, 12, 16, 20]
 
@@ -83,8 +82,6 @@ class DigitSignRecognizer():
         
         result = self.__hands.process(self.__img)
         if result.multi_hand_landmarks:
-            
-            # img = self.__draw_utils.draw_landmarks(img, result.multi_hand_landmarks[0], self.__mpHands.HAND_CONNECTIONS)
             
             # pick only one hand (left most in the picture if there are more than one)
             hand_lms = result.multi_hand_landmarks[0]

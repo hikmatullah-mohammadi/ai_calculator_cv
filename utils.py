@@ -3,7 +3,7 @@ from os import listdir
 
 
 
-def draw_collages(img):
+def draw_collages(img, **operators_images):
     # draw windows
     
     frame_h, frame_w = 480, 640
@@ -31,12 +31,11 @@ def draw_collages(img):
     
     # ============================================================================
     # add operators
-    # read operators images
-    plus = cv2.imread('./images/operators/plus.jpg')
-    minus = cv2.imread('./images/operators/minus.jpg')
-    mult = cv2.imread('./images/operators/mult.jpg')
-    div = cv2.imread('./images/operators/div.jpg')
-    equal = cv2.imread('./images/operators/equal.jpg')
+    plus = operators_images.get('plus')
+    minus = operators_images.get('minus')
+    mult = operators_images.get('mult')
+    div = operators_images.get('div')
+    equal = operators_images.get('equal')
     
     y_start = 123
     y_end = 173
