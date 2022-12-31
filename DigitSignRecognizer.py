@@ -1,10 +1,15 @@
+# import required libraries
 import cv2
 import numpy as np
 import mediapipe as mp
 
 
 class DigitSignRecognizer():
+    '''
+    This class aims to provide a way to detect and recognize hand sign for digits. (American Sign Language)
+    '''
     def __init__(self):
+        # initializations
         self.__img = None
         self.__img_w = 0
         self.__img_h = 0
@@ -13,16 +18,24 @@ class DigitSignRecognizer():
         self.__mpHands = mp.solutions.hands
         self.__hands = self.__mpHands.Hands()
         
+        # tips indices in mediapipe
         self.__tipsInds = [4, 8, 12, 16, 20]
 
 
     def __from_perc(self, perc, dim='w'):
+        '''
+        This method changes percentage to pixel value regarding the width and the height of the image accordingly.
+        '''
         if dim=='h' or dim=='height':
             return int(perc * self.__img_h / 1)
         elif dim=='w' or dim=='width':
             return int(perc * self.__img_w / 1)
 
     def __count_num_util(self, fingers_up_down):
+        '''
+        This method takes the list of fingers up or down e.g. [1, 1, 1, 0, 1],
+        and returns 1 to 9, 'select', or -1 accordingly.
+        '''
         if fingers_up_down[0] == 1 and fingers_up_down.count(1) == 0:
             return -1
         elif fingers_up_down[1] == 1 and fingers_up_down.count(1) == 1:
@@ -54,6 +67,9 @@ class DigitSignRecognizer():
             return -1
     
     def __is_zero(self, tips_lms):
+        '''
+        This method takes tips lanmarks and detect wether or not the sign is indicating ZERO
+        '''
         # extract xs and ys of tips
         x = [self.__from_perc(lm[1].x) for lm in tips_lms]
         y = [self.__from_perc(lm[1].y, 'h') for lm in tips_lms]
@@ -64,16 +80,21 @@ class DigitSignRecognizer():
         dis3 = np.linalg.norm([x[0] - x[3],  y[0] - y[3]])
         dis4 = np.linalg.norm([x[0] - x[4],  y[0] - y[4]])
         dis5 = np.linalg.norm([x[1] - x[4],  y[1] - y[4]])
-        
         if dis1 <= 35 and dis2 <= 35 and  dis3 <= 35 and  dis4 <= 35 and dis5 <= 30:
             return True
-        
         return False
 
     def get_finger_postion(self):
+        '''
+        This method takes no argument and returns the position of finger x and y
+        '''
         return self.__from_perc(self.tips_lms[1][1].x), self.__from_perc(self.tips_lms[1][1].y, dim='h')
 
     def main(self, img):
+        '''
+        This method, in its simplest definition, takes an image, if it can detect a hand in it, it will then
+        see wether the hand sign is representing a number. Finally, it returns the detected number or None if no hand is detected. 
+        '''
         self.__img = img
         self.__img_h, self.__img_w, _ = img.shape
         
@@ -88,7 +109,7 @@ class DigitSignRecognizer():
             
             self.tips_lms = [(id, lm) for id, lm in enumerate(hand_lms.landmark) if id in self.__tipsInds]
             
-            
+            # this loop's aim is to detect wether fingers are up (straight) or down
             for tip_lm in self.tips_lms:
                 x_tip, y_tip = self.__from_perc(tip_lm[1].x, 'w'), self.__from_perc(tip_lm[1].y, 'h')
                 center_tip = (x_tip, y_tip)
@@ -125,7 +146,7 @@ class DigitSignRecognizer():
             else:
                 number = self.__count_num_util(fingers_up_down)
             
-            return number
+            return number # 0-9, -1
             
         # if no hand detected
         return None

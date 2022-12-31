@@ -1,16 +1,19 @@
+# import required libraries
 import cv2
 
 import utils
 from DigitSignRecognizer import DigitSignRecognizer
 
 img_w, img_h = 640, 480
-    
+
+# capture the webcam
 cap = cv2.VideoCapture(0)
-cap.set(3, img_w)
-cap.set(4, img_h)
+cap.set(3, img_w) # set width
+cap.set(4, img_h) # set height
 
 digitSignRecognizer = DigitSignRecognizer()
 
+# some initial values
 prev_num = ''
 operation = ''
 operand1 = '0'
@@ -35,6 +38,7 @@ while True:
     number = digitSignRecognizer.main(img)
     if number and number != -1:
         
+        # if number is 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
         if number != 'select':    
             # add digit image and digit text (detected digit)
             img[img_h-110:img_h-10, 10:110] = utils.digit_img(number)
@@ -69,7 +73,7 @@ while True:
             # detect operations
             fings_pos_x, fings_pos_y = digitSignRecognizer.get_finger_postion()
             op = utils.detect_operation(fings_pos_x, fings_pos_y)
-            
+            # if an operation is detected
             if op and op != '=':
                 operation = op
                 cursor = 1
@@ -110,5 +114,5 @@ while True:
     if (cv2.waitKey(1) & 0xff==ord('q')) or cv2.waitKey(1) == 27 :
         break
         
-        
+
 cv2.destroyAllWindows()

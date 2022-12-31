@@ -3,8 +3,13 @@ from os import listdir
 
 
 
+
 def draw_collages(img, **operators_images):
-    # draw windows
+    '''
+    this function take an image and operators' images,
+    and draw all windows and collages on the screen.
+    things like seperating the window into half, adding title, operators, etc.
+    '''
     
     frame_h, frame_w = 480, 640
     half_w, half_h = int(frame_w/2), int(frame_h/2)
@@ -58,13 +63,19 @@ def draw_collages(img, **operators_images):
     return img
 
 def digit_img(digit):
-    
+    '''
+    this function takes a digit as a number and returns its image in rgb format
+    '''
     img = cv2.imread(f'./images/numbers/{digit}.jpg')
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
 
     
 def detect_operation(fing_pos_x, fing_pos_y):
+    '''
+    This function takes finger positions, x and y. Then detect where it is.
+    Finally, it returns the operation the finger is pointing at or None if not detected any 
+    '''
     frame_h, frame_w = 480, 640
     half_w, half_h = int(frame_w/2), int(frame_h/2)
     
@@ -93,5 +104,6 @@ def detect_operation(fing_pos_x, fing_pos_y):
             return '='
         else:
             return None
+    # if the finger is not in scope of operators
     else:
         return None
