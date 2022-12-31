@@ -14,8 +14,14 @@ def draw_collages(img):
     cv2.putText(img, 'AI Calculator', (180, 50), 1, 3, (0, 255, 0), 3)
     # divide the window into half horezontally
     cv2.line(img, (half_w, 70), (half_w, frame_h), (0, 255, 0), 2)
+    
+    
+    # left side
     # fill the left side
     img[70:, :half_w] = (255, 255, 255)
+    
+    cv2.line(img, (0, 120), (half_w, 120), (0, 255, 0), 2)
+    cv2.putText(img, 'Calculations', (20, 100), 2, .7, (0, 0, 0), 1)    
     
     # right-hand mini-window 
     cv2.line(img, (half_w, 120), (frame_w, 120), (0, 255, 0), 3)
@@ -25,6 +31,7 @@ def draw_collages(img):
     
     # ============================================================================
     # add operators
+    # read operators images
     plus = cv2.imread('./images/operators/plus.jpg')
     minus = cv2.imread('./images/operators/minus.jpg')
     mult = cv2.imread('./images/operators/mult.jpg')
@@ -89,4 +96,3 @@ def detect_operation(fing_pos_x, fing_pos_y):
             return None
     else:
         return None
-    

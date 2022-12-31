@@ -12,6 +12,7 @@ class DigitSignRecognizer():
         
         self.__mpHands = mp.solutions.hands
         self.__hands = self.__mpHands.Hands()
+        # self.__draw_utils = mp.solutions.drawing_utils
         
         self.__tipsInds = [4, 8, 12, 16, 20]
 
@@ -43,8 +44,13 @@ class DigitSignRecognizer():
             return 8
         elif all(fingers_up_down[2:]) == 1 and fingers_up_down.count(1) == 3:
             return 9
-        elif all(fingers_up_down[:2]) == 1 and fingers_up_down.count(1) == 2:
+        # if only thumb is up
+        elif fingers_up_down[0] == 1 and fingers_up_down.count(1) == 1:
             return 'select'
+        # if thumb and finger are up
+        elif all(fingers_up_down[0:2]) == 1 and fingers_up_down.count(1) == 2:
+            return 'select'
+        
         else:
             return -1
     
@@ -58,8 +64,9 @@ class DigitSignRecognizer():
         dis2 = np.linalg.norm([x[0] - x[2],  y[0] - y[2]])
         dis3 = np.linalg.norm([x[0] - x[3],  y[0] - y[3]])
         dis4 = np.linalg.norm([x[0] - x[4],  y[0] - y[4]])
+        dis5 = np.linalg.norm([x[1] - x[4],  y[1] - y[4]])
         
-        if dis1 <= 40 and dis2 <= 40 and  dis3 <= 40 and  dis4 <= 40:
+        if dis1 <= 35 and dis2 <= 35 and  dis3 <= 35 and  dis4 <= 35 and dis5 <= 30:
             return True
         
         return False
@@ -76,6 +83,9 @@ class DigitSignRecognizer():
         
         result = self.__hands.process(self.__img)
         if result.multi_hand_landmarks:
+            
+            # img = self.__draw_utils.draw_landmarks(img, result.multi_hand_landmarks[0], self.__mpHands.HAND_CONNECTIONS)
+            
             # pick only one hand (left most in the picture if there are more than one)
             hand_lms = result.multi_hand_landmarks[0]
             
