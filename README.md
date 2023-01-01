@@ -35,9 +35,7 @@ Bellow are hand signs for numbers from 0 to 9: <br>
 
 ### How to use it
 First it detects your hand via the webcam, then it tries to check your hands' sign. If the hand sign is representing a number,
-it will display the number and the digit sign on screen (bottom left). Next, it it detects that your hand is in 'select' mode (only thumb is up or thumb and finger are up),
-it will check the cursor (wether the number belongs to operand1 or operand2) and inputs the detected number to the proper operand. When you are in 'select' mode, you can
-use your finger to choose an operator from the screen (upper right), or select equal'=' to see the result. To reset, after getting the result, you can try to enter any number, then it will reset. Pressing 'q' or 'Esc' closes the app.
+it will display the number and the digit sign on screen (bottom left). Next, if it detects that your hand is in 'get number' mode (only thumb is up), it will check the cursor (wether the number belongs to operand1 or operand2) and inputs the detected number to the proper operand. When you are in 'select' mode (thumb and finger are up), you can use your finger to choose an operator from the screen (upper right), or select equal'=' to see the result. To reset, after getting the result, you can try to enter any number, then it will reset. Pressing 'q' or 'Esc' closes the app.
 
 
 ### Benefits
