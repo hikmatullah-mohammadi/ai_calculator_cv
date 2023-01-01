@@ -58,7 +58,12 @@ class DigitSignRecognizer():
             return 9
         # if only thumb is up
         elif fingers_up_down[0] == 1 and fingers_up_down.count(1) == 1:
-            return 'select'
+            thumb_tip = (self.__from_perc(self.tips_lms[0][1].x), self.__from_perc(self.tips_lms[0][1].y, dim='h'))
+            fing_tip = (self.__from_perc(self.tips_lms[1][1].x), self.__from_perc(self.tips_lms[1][1].y, dim='h'))
+            
+            # to make sure it is not mistaken with ZERO
+            if np.linalg.norm([thumb_tip[0] - fing_tip[0], thumb_tip[1] - fing_tip[1]]) > 80:
+                return 'get_num'
         # if thumb and finger are up
         elif all(fingers_up_down[0:2]) == 1 and fingers_up_down.count(1) == 2:
             return 'select'

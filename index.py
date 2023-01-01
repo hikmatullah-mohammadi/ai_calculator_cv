@@ -39,17 +39,16 @@ while True:
     if number and number != -1:
         
         # if number is 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
-        if number != 'select':    
+        if number != 'select' and number != 'get_num':    
             # add digit image and digit text (detected digit)
             img[img_h-110:img_h-10, 10:110] = utils.digit_img(number)
             cv2.putText(img, str(number), (120, img_h-10), 1, 8, (0, 255, 0), 8)
             prev_num = str(number)
         
         # 'select' sign is detected
-        elif number == 'select':
-            # add a green square to indicate select mode
+        elif number == 'get_num':
+            # add a green square besides equal sign to indicate select/get number mode
             img[123:173, img_w-50:] = (0, 255, 0)
-            
             
             if prev_num:
                 # keep digit image and digit text (detected digit)
@@ -66,10 +65,13 @@ while True:
                         operation = ''
                         operand1 = '0'
                         operand2 = '0'
-                        answer = ''
-                        
+                        answer = ''            
                 prev_num = ''
                 
+        elif number == 'select':
+            # add a green square besides equal sign to indicate select/get number mode
+            img[123:173, img_w-50:] = (0, 255, 0)
+            
             # detect operations
             fings_pos_x, fings_pos_y = digitSignRecognizer.get_finger_postion()
             op = utils.detect_operation(fings_pos_x, fings_pos_y)
